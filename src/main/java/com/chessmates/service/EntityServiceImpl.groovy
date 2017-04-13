@@ -34,6 +34,8 @@ class EntityServiceImpl implements EntityService {
                 .map { player -> player.username }
                 .collect(Collectors.toList())
 
+        scottLogicIds.collectMany{a -> scottLogicIds.collect{b->[a,b]}}
+
         // Get all unique games played between players.
         players.stream()
                 .map { player -> lichessApi.getGames player.id }

@@ -10,22 +10,18 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.TestPropertySource
 
-/**
- * Created by zwali on 13/04/2017.
- */
 @SpringBootTest
 @TestPropertySource(value = "classpath:test.properties")
-//@PropertySource("file:test.properties")
 class ItemRepositoryIntegrationTest {
-    ItemRepository repository
+    private ItemRepository repository
 
     @Before
-    public void setup() throws Exception{
+    void setup() throws Exception{
         repository = new ItemRepositoryImpl()
     }
 
     @Test
-    public void shouldDeleteSaveAndReadData(){
+    void shouldDeleteSaveAndReadData(){
         repository.delete("1")
         repository.save(new DataItem(id:"1"))
         DataItem result = repository.getByID("1")
@@ -33,6 +29,6 @@ class ItemRepositoryIntegrationTest {
     }
 
     @After
-    public void tearDown() throws Exception{
+    void tearDown() throws Exception{
     }
 }

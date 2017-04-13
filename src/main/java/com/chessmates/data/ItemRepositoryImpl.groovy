@@ -11,7 +11,8 @@ import org.springframework.stereotype.Repository
 import org.springframework.util.StringUtils
 
 /**
- * Created by zwali on 13/04/2017.
+ * Repository for CRUD operations
+ * talking to DynamoDB in AWS
  */
 @Repository
 class ItemRepositoryImpl implements ItemRepository {
@@ -27,9 +28,12 @@ class ItemRepositoryImpl implements ItemRepository {
     String amazonAWSSecretKey
 
     ItemRepositoryImpl(){
-        AmazonDynamoDB amazonDynamoDB = new AmazonDynamoDBClient(new BasicAWSCredentials(amazonAWSAccessKey, amazonAWSSecretKey));
-        if (!StringUtils.isEmpty(amazonDynamoDBEndpoint)) {
-            amazonDynamoDB.setEndpoint(amazonDynamoDBEndpoint);
+        AmazonDynamoDB amazonDynamoDB = new AmazonDynamoDBClient(new BasicAWSCredentials(amazonAWSAccessKey, amazonAWSSecretKey))
+        if (StringUtils.isEmpty(amazonDynamoDBEndpoint)) {
+            throw new Exception("No endpoint found for database")
+        }
+        else{
+            amazonDynamoDB.setEndpoint(amazonDynamoDBEndpoint)
         }
 
         table = new DynamoDB(amazonDynamoDB).getTable("DataItem")
