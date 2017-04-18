@@ -1,9 +1,13 @@
 package com.chessmates
 
+import com.amazonaws.auth.AWSCredentials
+import com.amazonaws.auth.BasicAWSCredentials
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient
+import com.chessmates.trialpackage.CaseGroovy
 import com.chessmates.utility.DisableSSL
 import com.google.common.cache.CacheBuilder
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.cache.CacheManager
@@ -15,6 +19,7 @@ import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
+import org.apache.commons.lang3.StringUtils
 
 import java.util.concurrent.TimeUnit
 
@@ -28,6 +33,15 @@ class Application {
 
     static final String REQUEST_CACHE_NAME = 'requestCache'
     static final int CACHE_EXPIRY_MINS = 30
+
+    @Value('${amazon.dynamodb.endpoint}')
+    String amazonDynamoDBEndpoint
+
+    @Value('${amazon.aws.accesskey}')
+    String amazonAWSAccessKey
+
+    @Value('${amazon.aws.secretkey}')
+    String amazonAWSSecretKey
 
     /**
      * Main entry method for the application
@@ -73,4 +87,20 @@ class Application {
         return simpleCacheManager
     }
 
+    @Bean
+    AmazonDynamoDB amazonDynamoDB() {
+        AmazonDynamoDB amazonDynamoDB = new AmazonDynamoDBClient(amazonAWSCredentials());
+
+        if (!StringUtils.isEmpty(amazonDynamoDBEndpoint)) {
+            amazonDynamoDB.setEndpoint(amazonDynamoDBEndpoint);
+        }
+
+        return amazonDynamoDB;
+    }
+
+    @Bean
+    AWSCredentials amazonAWSCredentials() {
+        return new BasicAWSCredentials(
+                amazonAWSAccessKey, amazonAWSSecretKey);
+    }
 }

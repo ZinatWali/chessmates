@@ -1,14 +1,15 @@
 package com.chessmates.data
 
-import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient
 import com.amazonaws.services.dynamodbv2.document.DynamoDB
 import com.amazonaws.services.dynamodbv2.document.Item
 import com.amazonaws.services.dynamodbv2.document.Table
-import org.springframework.beans.factory.annotation.Value
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationContext
+import org.springframework.stereotype.Component
 import org.springframework.stereotype.Repository
-import org.springframework.util.StringUtils
+
+import javax.annotation.PostConstruct
 
 /**
  * Repository for CRUD operations
@@ -18,25 +19,11 @@ import org.springframework.util.StringUtils
 class ItemRepositoryImpl implements ItemRepository {
     private Table table
 
-    @Value('${amazon.dynamodb.endpoint}')
-    String amazonDynamoDBEndpoint
-
-    @Value('${amazon.aws.accesskey}')
-    String amazonAWSAccessKey
-
-    @Value('${amazon.aws.secretkey}')
-    String amazonAWSSecretKey
+    @Autowired
+    AmazonDynamoDB amazonDynamoDB
 
     ItemRepositoryImpl(){
-        AmazonDynamoDB amazonDynamoDB = new AmazonDynamoDBClient(new BasicAWSCredentials(amazonAWSAccessKey, amazonAWSSecretKey))
-        if (StringUtils.isEmpty(amazonDynamoDBEndpoint)) {
-            throw new Exception("No endpoint found for database")
-        }
-        else{
-            amazonDynamoDB.setEndpoint(amazonDynamoDBEndpoint)
-        }
-
-        table = new DynamoDB(amazonDynamoDB).getTable("DataItem")
+       table = new DynamoDB(amazonDynamoDB).getTable("DataItem")
     }
 
     @Override

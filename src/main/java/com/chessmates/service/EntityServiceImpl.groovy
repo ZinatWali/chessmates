@@ -1,5 +1,6 @@
 package com.chessmates.service
 
+import com.chessmates.data.ItemRepository
 import com.chessmates.model.Game
 import com.chessmates.model.Player
 import com.chessmates.utility.LichessApi
@@ -21,9 +22,13 @@ class EntityServiceImpl implements EntityService {
 
     private LichessApi lichessApi
 
+
+    private ItemRepository repository
+
     @Autowired
-    EntityServiceImpl(LichessApi lichessApi) {
+    EntityServiceImpl(LichessApi lichessApi, ItemRepository repository) {
         this.lichessApi = lichessApi
+        this.repository = repository
     }
 
     /**
