@@ -17,28 +17,26 @@ import javax.annotation.PostConstruct
  */
 @Repository
 class ItemRepositoryImpl implements ItemRepository {
-    private Table table
+    private AmazonDynamoDB amazonDynamoDB
 
     @Autowired
-    AmazonDynamoDB amazonDynamoDB
-
-    ItemRepositoryImpl(){
-       table = new DynamoDB(amazonDynamoDB).getTable("DataItem")
+    ItemRepositoryImpl(AmazonDynamoDB amazonDynamoDB){
+       this.amazonDynamoDB = amazonDynamoDB
     }
 
     @Override
     DataItem getByID(String id) {
-        Item item = table.getItem("id", id)
+        Item item = new DynamoDB(amazonDynamoDB).getTable("DataItem").getItem("id", id)
         return new DataItem(id: item.get("id"))
     }
 
     @Override
     void save(DataItem item) {
-        table.putItem(new Item().with("id", item.id))
+        new DynamoDB(amazonDynamoDB).getTable("DataItem").putItem(new Item().with("id", item.id))
     }
 
     @Override
     void delete(String id) {
-        table.deleteItem("id", id)
+        new DynamoDB(amazonDynamoDB).getTable("DataItem").deleteItem("id", id)
     }
 }

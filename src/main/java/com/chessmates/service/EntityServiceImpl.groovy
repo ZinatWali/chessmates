@@ -22,13 +22,9 @@ class EntityServiceImpl implements EntityService {
 
     private LichessApi lichessApi
 
-
-    private ItemRepository repository
-
     @Autowired
-    EntityServiceImpl(LichessApi lichessApi, ItemRepository repository) {
+    EntityServiceImpl(LichessApi lichessApi) {
         this.lichessApi = lichessApi
-        this.repository = repository
     }
 
     /**

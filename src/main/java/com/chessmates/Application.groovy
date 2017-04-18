@@ -4,7 +4,6 @@ import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient
-import com.chessmates.trialpackage.CaseGroovy
 import com.chessmates.utility.DisableSSL
 import com.google.common.cache.CacheBuilder
 import org.springframework.beans.factory.annotation.Value

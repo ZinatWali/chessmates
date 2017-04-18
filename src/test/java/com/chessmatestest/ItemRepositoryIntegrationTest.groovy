@@ -20,7 +20,6 @@ class ItemRepositoryIntegrationTest {
 
     @Before
     void setup() throws Exception {
-//        repository = new ItemRepositoryImpl()
     }
 
     @Test
